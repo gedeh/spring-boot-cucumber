@@ -1,5 +1,5 @@
 
-
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +59,17 @@ public class BagCucumberStepDefinitions {
     @Then("^the bag should contain (\\d+) (\\w+)$")
     public void the_bag_should_contain_something(final int quantity, final String something) {
         assertNumberOfTimes(quantity, something, false);
+    }
+
+    @When("I put these items in the bag")
+    public void i_put_these_items_in_the_bag(DataTable dataTable) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            int amount = Integer.parseInt(columns.get("Amount"));
+            for (int index = 1; index <= amount; index++) {
+                bagHttpClient.put(columns.get("Name"));
+            }
+        }
     }
 
     private void assertNumberOfTimes(final int quantity, final String something, final boolean onlyThat) {
