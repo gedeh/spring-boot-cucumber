@@ -1,9 +1,9 @@
-package io.tpd.springbootcucumber.bagbasics;
+
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.tpd.springbootcucumber.bagcommons.BagHttpClient;
+import io.tpd.springbootcucumber.common.BagHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +24,30 @@ public class BagCucumberStepDefinitions {
     @Autowired
     private BagHttpClient bagHttpClient;
 
+    @Given("^the bag is not empty$")
+    public void the_bag_is_not_empty() {
+        bagHttpClient.put("something");
+        bagHttpClient.put("something else");
+        assertThat(bagHttpClient.getContents().isEmpty()).isFalse();
+    }
+
+    @Given("^the bag is empty$")
+    public void the_bag_is_empty() {
+        bagHttpClient.clean();
+        assertThat(bagHttpClient.getContents().isEmpty()).isTrue();
+    }
+
     @When("^I put (\\d+) (\\w+) in the bag$")
     public void i_put_something_in_the_bag(final int quantity, final String something) {
         IntStream.range(0, quantity)
                 .peek(n -> log.info("Putting a {} in the bag, number {}", something, quantity))
                 .map(ignore -> bagHttpClient.put(something))
                 .forEach(statusCode -> assertThat(statusCode).isEqualTo(HttpStatus.CREATED.value()));
+    }
+
+    @When("^I empty the bag$")
+    public void empty_the_bag() {
+        bagHttpClient.clean();
     }
 
     @Then("^the bag should contain only (\\d+) (\\w+)$")
@@ -42,18 +60,6 @@ public class BagCucumberStepDefinitions {
         assertNumberOfTimes(quantity, something, false);
     }
 
-    @Given("^the bag is not empty$")
-    public void the_bag_is_not_empty() {
-        bagHttpClient.put("something");
-        bagHttpClient.put("something else");
-        assertThat(bagHttpClient.getContents().isEmpty()).isFalse();
-    }
-
-    @When("^I empty the bag$")
-    public void empty_the_bag() {
-        bagHttpClient.clean();
-    }
-
     private void assertNumberOfTimes(final int quantity, final String something, final boolean onlyThat) {
         final List<String> things = bagHttpClient.getContents().getThings();
         log.info("Expecting {} times {}. The bag contains {}", quantity, something, things);
@@ -63,5 +69,4 @@ public class BagCucumberStepDefinitions {
             assertThat(timesInList).isEqualTo(things.size());
         }
     }
-
 }

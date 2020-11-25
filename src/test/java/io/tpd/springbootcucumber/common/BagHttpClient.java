@@ -1,4 +1,4 @@
-package io.tpd.springbootcucumber.bagcommons;
+package io.tpd.springbootcucumber.common;
 
 import io.tpd.springbootcucumber.Bag;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -19,7 +19,6 @@ public class BagHttpClient {
     private int port;
     private final RestTemplate restTemplate = new RestTemplate();
 
-
     private String thingsEndpoint() {
         return SERVER_URL + ":" + port + THINGS_ENDPOINT;
     }
@@ -35,6 +34,4 @@ public class BagHttpClient {
     public void clean() {
         restTemplate.delete(thingsEndpoint());
     }
-
-
 }
