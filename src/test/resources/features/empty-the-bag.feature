@@ -1,7 +1,11 @@
 Feature: Emptying the bag
 
-  Scenario: Empty the bag
-    Given the bag is not empty
+  As a user
+  I want to empty my bag
+  so that I can start over with an empty bag
+
+  Scenario: Empty an empty bag
+    Given the bag is empty
     When I empty the bag
     Then the bag is empty
 
@@ -15,3 +19,5 @@ Feature: Emptying the bag
     Then the bag should contain 1 potato
     And the bag should contain 1 broccoli
     And the bag should contain 2 cucumber
+    When I empty the bag
+    Then the bag is empty

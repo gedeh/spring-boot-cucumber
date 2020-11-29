@@ -1,4 +1,8 @@
-Feature: Adding items to bag
+Feature: Add items to bag
+
+  As a user
+  I want to add items to my bag
+  so that I can carry them
 
   Scenario: Putting one thing in the bag
     Given the bag is empty
