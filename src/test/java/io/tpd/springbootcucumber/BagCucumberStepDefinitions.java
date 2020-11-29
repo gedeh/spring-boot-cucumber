@@ -1,3 +1,4 @@
+package io.tpd.springbootcucumber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
