@@ -4,7 +4,7 @@ This code sample shows how to use Dependency Injection in Cucumber within a Spri
 
 ## Run the Spring Boot app
 
-```shell
+```bash
 mvn spring-boot:run
 ```
 
@@ -12,8 +12,8 @@ The server will be available in [http://localhost:8090/things](http://localhost:
 
 ## Run the Cucumber test
 
-```shell
-mvn test
+```bash
+mvn test -Dcucumber.filter.tags="not @wip"
 ```
 
 Then see the report in [target/cucumber/bag.html](./target/cucumber/bag.html)
